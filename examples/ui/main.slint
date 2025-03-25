@@ -1,0 +1,39 @@
+component SleekButton inherits Rectangle {
+    width: 120px;
+    height: 40px;
+    border-radius: 8px;
+    background: @linear-gradient(45deg, #4CAF50 0%, #81C784 100%);
+    border-width: 1px;
+    border-color: #388E3C;
+
+    Text {
+        text: "Click Me";
+        color: white;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+        font-size: 16px;
+    }
+
+    // Hover effect
+    states [
+        hover when touch-area.has-hover : {
+            background: @linear-gradient(45deg, #66BB6A 0%, #A5D6A7 100%);
+            border-color: #4CAF50;
+        }
+    ]
+
+    touch-area := TouchArea {
+        // Enable hover detection
+    }
+}
+
+export component MainWindow inherits Window {
+    width: 300px;
+    height: 200px;
+    background: #F5F5F5;
+
+    SleekButton {
+        x: 90px;
+        y: 80px;
+    }
+}

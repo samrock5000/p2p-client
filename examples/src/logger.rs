@@ -2,7 +2,7 @@
 use std::{io};
 
 use chrono::prelude::*;
-use chrono::{DateTime};
+use chrono::{DateTime, Utc};
 use log::{Level, Log, Metadata, Record, SetLoggerError};
 
 struct Logger {
@@ -20,7 +20,7 @@ impl Log for Logger {
             write(record, &self.stream);
 
             fn write(record: &log::Record, mut stream: impl io::Write) {
-                let now = DateTime::from(std::time::SystemTime::now())
+                let now = DateTime::<Utc>::from(std::time::SystemTime::now())
                     .to_rfc3339_opts(SecondsFormat::Millis, true);
                 writeln!(stream, "{} {}", now, record.args()).expect("write shouldn't fail");
             }

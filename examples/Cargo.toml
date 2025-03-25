@@ -1,21 +1,20 @@
 [package]
-name = "p2p-client"
+name = "watch-demo"
 version = "0.1.0"
 edition = "2024"
 
-[[example]]
-name = "watch-demo"
-path = "examples/src/main.rs"
+
+[build-dependencies]
+slint-build = "1.10.0"
 
 [dependencies]
 nakamoto-cash = { git = "https://github.com/samrock5000/nakamoto"  }
 log = { version = "0.4", features = ["std"] }
+thiserror = "1.0.61"
 chrono = { version = "0.4", features = ["std"], default-features = false }
 argh = "0.1.12"
 crossbeam-channel = { version = "0.5.6" }
-
-[workspace]
-members = [
-    # "src",       # Main crate (optional, if you want it in the workspace)
-    "examples" # All subdirectories under examples/
-]
+slint = { version = "1.10.0" }
+murmur3 = { git = "https://github.com/stusmall/murmur3" }
+rand = "0.8.5"
+bit-vec = "0.8.0"

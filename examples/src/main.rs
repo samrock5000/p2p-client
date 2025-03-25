@@ -4,6 +4,9 @@ use std::io::Read;
 use std::io::BufRead;
 mod error;
 use std::str::Lines;
+use slint::PlatformError;
+
+slint::include_modules!();
 
 use argh::FromArgs;
 use client::{Loading, Client, Config};
@@ -58,13 +61,13 @@ impl<H: Handle> Watcher<H> {
                         break;
                     }
                 }
-                recv(ui_rx) -> event => {
-                    let event = event?;
-                    if let ControlFlow::Break(()) = 
-                        self.handle_user_input(event)? { 
-                        break;
-                    }
-                }
+                // recv(ui_rx) -> event => {
+                //     let event = event?;
+                //     if let ControlFlow::Break(()) = 
+                //         self.handle_user_input(event)? { 
+                //         break;
+                //     }
+                // }
             }
         }
         Ok(())
@@ -163,24 +166,18 @@ fn main() {
     });
 
     // New thread for handling user input from terminal
-    let t3 = thread::spawn(move || {
-        let tx_handle = ui_input_tx.clone();
-        let stdin = io::stdin().lock();
-
-    for event in stdin.events() {
-        
-    }
-        let event = event?;
-        loop {
-    });
-
-    // t1.join().unwrap().unwrap();
+    run_ui_main();
+    t1.join().unwrap().unwrap();
     t2.join().unwrap();
-    t3.join().unwrap();
+    // t3.join().unwrap();
 }
 
 impl Options {
     pub fn from_env() -> Self {
         argh::from_env()
     }
+}
+pub fn run_ui_main() -> Result<(), PlatformError> {
+        let main_window = MainWindow::new()?;
+        main_window.run()
 }
