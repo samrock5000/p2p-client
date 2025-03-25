@@ -1,39 +1,102 @@
-component SleekButton inherits Rectangle {
-    width: 120px;
-    height: 40px;
-    border-radius: 8px;
-    background: @linear-gradient(45deg, #4CAF50 0%, #81C784 100%);
-    border-width: 1px;
-    border-color: #388E3C;
+import { VerticalBox, Button, HorizontalBox, LineEdit, Slider, GridBox, StandardListView, StandardButton } from "std-widgets.slint";
 
-    Text {
-        text: "Click Me";
-        color: white;
-        horizontal-alignment: center;
-        vertical-alignment: center;
-        font-size: 16px;
-    }
+// export component MainWindow inherits Window {
+//     in-out property <string> loaded-header;
+//     callback header-loaded();
+//     width: 300px;
+//     height: 200px;
+//     background: #F5F5F5;
 
-    // Hover effect
-    states [
-        hover when touch-area.has-hover : {
-            background: @linear-gradient(45deg, #66BB6A 0%, #A5D6A7 100%);
-            border-color: #4CAF50;
-        }
-    ]
-
-    touch-area := TouchArea {
-        // Enable hover detection
-    }
-}
-
+//     header-data := Text {
+//         text: loaded-header;
+//         color: white;
+//         horizontal-alignment: center;
+//         vertical-alignment: center;
+//         font-size: 16px;
+//     }
+// }
 export component MainWindow inherits Window {
-    width: 300px;
-    height: 200px;
-    background: #F5F5F5;
+    in-out property <string> loaded-header;
+    in-out property <string> bloom-item;
+    in-out property <[string]> filter-items;
+    callback header-loaded();
+    callback load-bloom-item();
+    title: "My Application";
+    // Set preferred size instead of fixed width/height
+    preferred-width: 800px;
+    preferred-height: 600px;
+    // Make window resizable with constraints
+    min-width: 400px;
+    min-height: 300px;
+    max-width: 1920px;
+    max-height: 1080px;
+    
+    // Dark background with green accents
+    background: #1E2A31; // Dark grayish-blue
+    
+    // Main layout
+    VerticalLayout {
+        spacing: 10px;
+        padding: 15px;
+        
+        Rectangle {
+            height: 60px;
+            background: #2A3D45; // Slightly lighter dark shade
+            border-radius: 8px;
+            
+            Text {
+                text: "Block Tip \{loaded-header}";
+                color: #00CC66; // Green accent
+                font-size: 24px;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+        
+        Rectangle {
+            background: #2A3D45;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: #00CC66;
+            
+            VerticalLayout {
+                padding: 10px;
+                
+                Text {
+                    text: "Content Area";
+                    color: #FFFFFF;
+                    font-size: 16px;
+                }
+                            GridLayout {
+                Row {
+                    bloom-add-item := LineEdit {
+                        height: root.height * 0.05;
+                        placeholder-text: "add item to filter";
+                        text: "";
+                        font-size: 15px;
+                        edited => {
+                            root.bloom-item = self.text;
+                        }
+                    }
 
-    SleekButton {
-        x: 90px;
-        y: 80px;
+                    Button {
+                        height: root.height * 0.05;
+                        text: "update bloom filter";
+                        clicked => {
+                            load-bloom-item();
+                        }
+                    }
+                }
+            }
+
+                // Rectangle {
+                //     height: 100px;
+                //     background: #1E2A31;
+                //     border-radius: 4px;
+                //     border-width: 1px;
+                //     border-color: #00CC66;
+                // }
+            }
+        }
     }
 }
