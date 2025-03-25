@@ -14,6 +14,7 @@ cargo run -- --network chipnet --debug
 ## ⚠️ Caution
 
 ###### Creates client data in $HOME/.nakamoto by default
+##### runs on latest rust stable toolchain.
 
 
 
