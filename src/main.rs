@@ -1,12 +1,12 @@
 use std::{env, net, thread};
 use argh::FromArgs;
 use client::{Client, Config};
-mod logger;
 use nakamoto_cash::client::traits::Handle;
 use nakamoto_cash::client::{self, Network};
 type Reactor = nakamoto_cash::net::poll::Reactor<net::TcpStream>;
 use crossbeam_channel::{self as chan};
 
+pub mod logger;
 /// A Bitcoin wallet.
 #[derive(FromArgs)]
 pub struct Options {

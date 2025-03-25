@@ -47,6 +47,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d86b93f97252c47b41663388e6d155714a9d0c398b99f1005cbc5f978b29f445"
 
 [[package]]
+name = "bit-vec"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5e764a1d40d510daf35e07be9eb06e75770908c27d411ee6c92109c9840eaaf7"
+
+[[package]]
 name = "bitcoin_hashes"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -60,7 +66,7 @@ dependencies = [
  "bech32",
  "bitcoin_hashes",
  "hex-conservative",
- "murmur3",
+ "murmur3 0.4.1",
  "rand",
  "secp256k1",
 ]
@@ -187,6 +193,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "murmur3"
+version = "0.5.2"
+source = "git+https://github.com/stusmall/murmur3#2c39087f094ae982a463e1cda9cf4d483a09192b"
+
+[[package]]
 name = "nakamoto-cash"
 version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
@@ -298,10 +309,14 @@ name = "p2p-client"
 version = "0.1.0"
 dependencies = [
  "argh",
+ "bit-vec",
  "chrono",
  "crossbeam-channel",
  "log",
+ "murmur3 0.5.2",
  "nakamoto-cash",
+ "rand",
+ "thiserror",
 ]
 
 [[package]]
