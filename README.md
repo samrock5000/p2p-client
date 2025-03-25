@@ -1,4 +1,4 @@
-# # 🌟 Light P2P BCH Client Example 🌟
+## 🌟 Light P2P BCH Client Example 🌟
 
 ## 🚀 Clone the Repo
 ```bash
@@ -14,7 +14,7 @@ cargo run -- --network chipnet --debug
 ## ⚠️ Caution
 
 ###### Creates client data in $HOME/.nakamoto by default
-##### runs on latest rust stable toolchain.
+##### requires rust edition 2024 stable.
 
 
 
