@@ -1,11 +1,8 @@
 # # 🌟 Light P2P BCH Client Example 🌟
-## 🚀 Initialize New Rust Project
 
+## 🚀 Clone the Repo
 ```bash
-mkdir bch-sync
-```
-```bash
-cargo init
+git clone https://github.com/samrock5000/p2p-client
 ```
 
 ## ▶️ Run the Client
