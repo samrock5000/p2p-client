@@ -1,0 +1,13 @@
+[package]
+name = "p2p-client"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+nakamoto-cash = { git = "https://github.com/samrock5000/nakamoto"  }
+log = { version = "0.4", features = ["std"] }
+chrono = { version = "0.4", features = ["std"], default-features = false }
+argh = "0.1.12"
+crossbeam-channel = { version = "0.5.6" }
+
+
