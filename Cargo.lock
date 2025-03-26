@@ -205,6 +205,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dde20b3d026af13f561bdd0f15edf01fc734f0dafcedbaf42bba506a9517f223"
 
 [[package]]
+name = "arboard"
+version = "3.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df099ccb16cd014ff054ac1bf392c67feeef57164b05c42f037cd40f5d4357f4"
+dependencies = [
+ "clipboard-win 5.4.0",
+ "core-graphics 0.23.2",
+ "image",
+ "log",
+ "objc2 0.5.2",
+ "objc2-app-kit 0.2.2",
+ "objc2-foundation 0.2.2",
+ "parking_lot",
+ "windows-sys 0.48.0",
+ "x11rb",
+]
+
+[[package]]
 name = "arg_enum_proc_macro"
 version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -593,6 +611,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "bitcoincash"
+version = "0.29.2"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "bech32",
+ "bit-vec",
+ "bitcoin_hashes",
+ "hex-conservative",
+ "murmur3 0.5.2",
+ "rand",
+ "secp256k1",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -881,6 +913,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "clipboard-win"
+version = "5.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "15efe7a882b08f34e38556b14f2fb3daa98769d06c7f0c1b076dfd0d983bc892"
+dependencies = [
+ "error-code",
+]
+
+[[package]]
 name = "clru"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -954,7 +995,7 @@ version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "deb85422867ca93da58b7f95fb5c0c10f6183ed6e1ef8841568968a896d3a858"
 dependencies = [
- "clipboard-win",
+ "clipboard-win 3.1.1",
  "objc",
  "objc-foundation",
  "objc_id",
@@ -1387,6 +1428,12 @@ dependencies = [
  "libc",
  "windows-sys 0.59.0",
 ]
+
+[[package]]
+name = "error-code"
+version = "3.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a5d9305ccc6942a704f4335694ecd3de2ea531b114ac2d51f5f843750787a92f"
 
 [[package]]
 name = "euclid"
@@ -2926,6 +2973,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23fb14cb19457329c82206317a5663005a4d404783dc74f4252769b0d5f42856"
 
 [[package]]
+name = "lock_api"
+version = "0.4.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "07af8b9cdd281b7915f413fa73f29ebd5d55d0d3f0155584dade1ff18cea1b17"
+dependencies = [
+ "autocfg",
+ "scopeguard",
+]
+
+[[package]]
 name = "log"
 version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3106,12 +3163,25 @@ name = "nakamoto-cash"
 version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
 dependencies = [
- "nakamoto-chain",
- "nakamoto-client",
- "nakamoto-common",
- "nakamoto-net",
- "nakamoto-net-poll",
- "nakamoto-p2p",
+ "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-client 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-net-poll 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+]
+
+[[package]]
+name = "nakamoto-cash"
+version = "0.4.0"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-client 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-net-poll 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
 ]
 
 [[package]]
@@ -3120,7 +3190,17 @@ version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
 dependencies = [
  "log",
- "nakamoto-common",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "nakamoto-chain"
+version = "0.4.0"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "log",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
  "thiserror 1.0.69",
 ]
 
@@ -3133,10 +3213,26 @@ dependencies = [
  "fastrand 1.9.0",
  "log",
  "microserde",
- "nakamoto-chain",
- "nakamoto-common",
- "nakamoto-net",
- "nakamoto-p2p",
+ "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "nakamoto-client"
+version = "0.4.0"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "crossbeam-channel",
+ "fastrand 1.9.0",
+ "log",
+ "microserde",
+ "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
  "thiserror 1.0.69",
 ]
 
@@ -3146,11 +3242,26 @@ version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
 dependencies = [
  "bitcoin_hashes",
- "bitcoincash",
+ "bitcoincash 0.29.2 (git+https://github.com/samrock5000/nakamoto)",
  "fastrand 1.9.0",
  "log",
  "microserde",
- "nakamoto-net",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nonempty",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "nakamoto-common"
+version = "0.4.0"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "bitcoin_hashes",
+ "bitcoincash 0.29.2 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "fastrand 1.9.0",
+ "log",
+ "microserde",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
  "nonempty",
  "thiserror 1.0.69",
 ]
@@ -3167,6 +3278,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "nakamoto-net"
+version = "0.4.0"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "crossbeam-channel",
+ "fastrand 1.9.0",
+ "log",
+ "thiserror 1.0.69",
+]
+
+[[package]]
 name = "nakamoto-net-poll"
 version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
@@ -3174,7 +3296,20 @@ dependencies = [
  "crossbeam-channel",
  "libc",
  "log",
- "nakamoto-net",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "popol",
+ "socket2",
+]
+
+[[package]]
+name = "nakamoto-net-poll"
+version = "0.4.0"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "crossbeam-channel",
+ "libc",
+ "log",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
  "popol",
  "socket2",
 ]
@@ -3188,8 +3323,22 @@ dependencies = [
  "fastrand 1.9.0",
  "log",
  "microserde",
- "nakamoto-common",
- "nakamoto-net",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "nakamoto-p2p"
+version = "0.4.0"
+source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
+dependencies = [
+ "crossbeam-channel",
+ "fastrand 1.9.0",
+ "log",
+ "microserde",
+ "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
  "thiserror 1.0.69",
 ]
 
@@ -3742,7 +3891,7 @@ dependencies = [
  "chrono",
  "crossbeam-channel",
  "log",
- "nakamoto-cash",
+ "nakamoto-cash 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
 ]
 
 [[package]]
@@ -3775,6 +3924,29 @@ name = "parking"
 version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f38d5652c16fde515bb1ecef450ab0f6a219d619a7274976324d5e377f7dceba"
+
+[[package]]
+name = "parking_lot"
+version = "0.12.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f1bf18183cf54e8d6059647fc3063646a1801cf30896933ec2311622cc4b9a27"
+dependencies = [
+ "lock_api",
+ "parking_lot_core",
+]
+
+[[package]]
+name = "parking_lot_core"
+version = "0.9.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e401f977ab385c9e4e3ab30627d6f26d00e2c73eef317493c4ec6d468726cf8"
+dependencies = [
+ "cfg-if",
+ "libc",
+ "redox_syscall 0.5.10",
+ "smallvec",
+ "windows-targets 0.52.6",
+]
 
 [[package]]
 name = "paste"
@@ -5392,13 +5564,15 @@ dependencies = [
 name = "watch-demo"
 version = "0.1.0"
 dependencies = [
+ "arboard",
  "argh",
  "bit-vec",
  "chrono",
  "crossbeam-channel",
+ "hex",
  "log",
  "murmur3 0.5.2",
- "nakamoto-cash",
+ "nakamoto-cash 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
  "rand",
  "slint",
  "slint-build",

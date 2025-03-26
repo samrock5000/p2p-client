@@ -8,7 +8,7 @@ edition = "2024"
 slint-build = "1.10.0"
 
 [dependencies]
-nakamoto-cash = { git = "https://github.com/samrock5000/nakamoto"  }
+nakamoto-cash = { git = "https://github.com/samrock5000/nakamoto-cash"  }
 log = { version = "0.4", features = ["std"] }
 thiserror = "1.0.61"
 chrono = { version = "0.4", features = ["std"], default-features = false }
@@ -18,3 +18,5 @@ slint = { version = "1.10.0" }
 murmur3 = { git = "https://github.com/stusmall/murmur3" }
 rand = "0.8.5"
 bit-vec = "0.8.0"
+hex = "0.4.3"
+arboard = "3.4.1"

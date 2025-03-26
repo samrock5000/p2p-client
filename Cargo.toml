@@ -8,7 +8,8 @@ name = "watch-demo"
 path = "examples/src/main.rs"
 
 [dependencies]
-nakamoto-cash = { git = "https://github.com/samrock5000/nakamoto"  }
+nakamoto-cash = { git = "https://github.com/samrock5000/nakamoto-cash"  }
+# nakamoto-cash = { path = "../nakamoto"  }
 log = { version = "0.4", features = ["std"] }
 chrono = { version = "0.4", features = ["std"], default-features = false }
 argh = "0.1.12"

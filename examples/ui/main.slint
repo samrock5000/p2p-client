@@ -1,101 +1,322 @@
-import { VerticalBox, Button, HorizontalBox, LineEdit, Slider, GridBox, StandardListView, StandardButton } from "std-widgets.slint";
+import { VerticalBox, Button, HorizontalBox, LineEdit, Slider, GridBox, StandardListView, StandardButton, ScrollView } from "std-widgets.slint";
 
-// export component MainWindow inherits Window {
-//     in-out property <string> loaded-header;
-//     callback header-loaded();
-//     width: 300px;
-//     height: 200px;
-//     background: #F5F5F5;
-
-//     header-data := Text {
-//         text: loaded-header;
-//         color: white;
-//         horizontal-alignment: center;
-//         vertical-alignment: center;
-//         font-size: 16px;
-//     }
-// }
 export component MainWindow inherits Window {
     in-out property <string> loaded-header;
     in-out property <string> bloom-item;
-    in-out property <[string]> filter-items;
+    in-out property <[string]> bloom-items:[
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+    ];
+    in-out property <string> matched-tx;
+    in-out property <[string]> filtered-peers:["asdasd", "as123da", "asdasd", "as123da", "asdasd", "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+    ]; //peers loaded with filter
+    // in-out property <[string]> matched-txs:["efefefefefef"];
+    in-out property <[string]> matched-txs:[
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+        // "asdasd",
+        // "as123da",
+    ];
     callback header-loaded();
     callback load-bloom-item();
-    title: "My Application";
-    // Set preferred size instead of fixed width/height
+    callback load-peers-filter();
+    callback reset-filters();
+    callback update-tx-matches();
+    // New callback to reset filters
+    callback unload-filters();
+    callback copy-to-clipboard(string);
+
+    title: "P2P Network Client";
     preferred-width: 800px;
     preferred-height: 600px;
-    // Make window resizable with constraints
     min-width: 400px;
     min-height: 300px;
     max-width: 1920px;
     max-height: 1080px;
-    
-    // Dark background with green accents
-    background: #1E2A31; // Dark grayish-blue
-    
-    // Main layout
+    background: #1E2A31;
+
     VerticalLayout {
         spacing: 10px;
         padding: 15px;
-        
+
         Rectangle {
             height: 60px;
-            background: #2A3D45; // Slightly lighter dark shade
+            background: #2A3D45;
             border-radius: 8px;
-            
+
             Text {
                 text: "Block Tip \{loaded-header}";
-                color: #00CC66; // Green accent
+                color: #00CC66;
                 font-size: 24px;
                 horizontal-alignment: center;
                 vertical-alignment: center;
             }
         }
-        
+
         Rectangle {
             background: #2A3D45;
             border-radius: 8px;
             border-width: 1px;
             border-color: #00CC66;
-            
+
             VerticalLayout {
                 padding: 10px;
-                
+
                 Text {
-                    text: "Content Area";
+                    text: "Watch Area";
                     color: #FFFFFF;
                     font-size: 16px;
                 }
-                            GridLayout {
-                Row {
-                    bloom-add-item := LineEdit {
-                        height: root.height * 0.05;
-                        placeholder-text: "add item to filter";
-                        text: "";
-                        font-size: 15px;
-                        edited => {
-                            root.bloom-item = self.text;
-                        }
-                    }
 
-                    Button {
-                        height: root.height * 0.05;
-                        text: "update bloom filter";
-                        clicked => {
-                            load-bloom-item();
+                Text {
+                    text: "Filter Loaded Peers";
+                    color: #FFFFFF;
+                    font-size: 10px;
+                }
+
+                ScrollView {
+                    height: 100px;
+                    viewport-width: 300px;
+                    VerticalBox { }
+
+                    VerticalLayout {
+                        for item in root.filtered-peers: Rectangle {
+                            border-color: #00CC66;
+                            background: #2A3D45;
+                            border-width: 1px;
+                            border-radius: 2px;
+                            height: 20px;
+                            Text {
+                                text: "\{item}";
+                                color: #FFFFFF;
+                                font-size: 12px;
+                                vertical-alignment: center;
+                                horizontal-alignment: left;
+                                x: 5px;
+                            }
                         }
                     }
                 }
-            }
 
-                // Rectangle {
-                //     height: 100px;
-                //     background: #1E2A31;
-                //     border-radius: 4px;
-                //     border-width: 1px;
-                //     border-color: #00CC66;
-                // }
+                Text {
+                    text: "Latest Match: \{matched-tx}";
+                    color: #FFFFFF;
+                    font-size: 12px;
+                }
+
+                VerticalBox {
+                    Text {
+                        text: "Transaction matches:";
+                        color: #FFFFFF;
+                        font-size: 8px;
+                    }
+
+                    ScrollView {
+                        height: 100px;
+                        viewport-width: 300px;
+                        viewport-height: 300px;
+
+                        VerticalLayout {
+                            for item in root.matched-txs: Rectangle {
+                                border-color: #00CC66;
+                                background: #2A3D45;
+                                border-width: 1px;
+                                border-radius: 2px;
+                                height: 20px;
+                                ta := TouchArea {
+                                    mouse-cursor: pointer; // Indicate clickability
+                                clicked => {
+                                        root.copy-to-clipboard(item);
+                                        txiditem.clicked-recently = true;
+                                        timer.running = true; // Stop after one trigger
+                                }
+                                
+                                // Timer to reset clicked-recently after 200ms
+                                timer := Timer {
+                                        property <int> count: 0;
+                                        interval: 100ms;
+                                        running: false; // Only runs when triggered
+                                    triggered() => {
+                                            txiditem.clicked-recently = false;
+                                            self.running = false; // Stop after one trigger
+                                        count += 1;
+                                        }
+                                    }
+
+                                    txid := VerticalLayout {
+
+                                        txiditem := Text {
+                                            property <bool> clicked-recently: false;
+                                            text: "\{item}";
+                                    // color: #FFFFFF;
+                                    font-size: 12px;
+                                            vertical-alignment: center;
+                                            horizontal-alignment: left;
+                                            animate x {
+                                                duration: 200ms;
+                                                easing: ease-out-back;
+                                            }
+                                            color: (self.clicked-recently ? #00CC66 : #FFFFFF); // Green on hover, yellow post-click, white default
+                                            x: ta.has-hover ? 5px : 1.05 * 2px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                VerticalBox {
+                    padding-bottom: 2px;
+                    padding-top: 2px;
+                    Text {
+                        height: 15px;
+                        text: "Bloom Filter Items:";
+                        color: #FFFFFF;
+                        font-size: 8px;
+                    }
+
+                    ScrollView {
+                        height: 50px;
+                        viewport-width: 300px;
+                        viewport-height: 100px;
+
+                        VerticalLayout {
+                            for item in root.bloom-items: Rectangle {
+                                border-color: #00CC66;
+                                background: #2A3D45;
+                                border-width: 1px;
+                                border-radius: 2px;
+                                height: 15px;
+                                VerticalLayout {
+                                    Text {
+                                        text: "\{item}";
+                                        color: #FFFFFF;
+                                        font-size: 12px;
+                                        vertical-alignment: center;
+                                        horizontal-alignment: left;
+                                        x: 5px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                GridBox {
+                    Row {
+                        bloom-add-item := LineEdit {
+                            height: root.height * 0.05;
+                            placeholder-text: "add item to filter";
+                            text: "";
+                            font-size: 15px;
+                            edited => {
+                                root.bloom-item = self.text;
+                            }
+                            // Handle Enter key press
+                            accepted => {
+                                load-bloom-item();
+                                self.text = "";
+                                // Clear input after submission
+                            }
+                        }
+
+                        Button {
+                            height: root.height * 0.05;
+                            text: "update filter";
+                            clicked => {
+                                load-bloom-item();
+                                bloom-add-item.text = "";
+                                // Clear input after button click
+                            }
+                        }
+                    }
+
+                    Row {
+                        Text {
+                            // width:;
+                            text: "Send Bloom:";
+                            color: #FFFFFF;
+                            font-size: 18px;
+                        }
+
+                        Button {
+                            height: root.height * 0.05;
+                            // width: root.width * 0.05;
+                            text: "load peers";
+                            clicked => {
+                                load-peers-filter();
+                            }
+                        }
+                    }
+
+                    // New row for filter control buttons
+                    Row {
+                        Button {
+                            height: root.height * 0.05;
+                            text: "reset filters";
+                            clicked => {
+                                reset-filters();
+                                bloom-add-item.text = "";
+                                // Clear input when resetting
+                                root.bloom-item = "";
+                                // Reset bloom-item property
+                                root.bloom-items = [];
+                                // Clear filter items array
+                            }
+                        }
+
+                        Button {
+                            height: root.height * 0.05;
+                            text: "unload filters";
+                            clicked => {
+                                unload-filters();
+                                bloom-add-item.text = "";
+                                // Clear input when unloading
+                                root.bloom-item = "";
+                                // Reset bloom-item property
+                                root.bloom-items = [];
+                                // Clear filter items array
+                            }
+                        }
+                    }
+                }
             }
         }
     }
