@@ -3,6 +3,7 @@ use std::ops::ControlFlow;
 use std::{env, io, net, thread};
 mod error;
 use nakamoto_cash::chain::Transaction;
+use nakamoto_cash::common::bitcoin::cash_addr;
 use nakamoto_cash::common::bitcoin::network::constants::ServiceFlags;
 // use std::str::Lines;
 use arboard::Clipboard;
@@ -23,9 +24,7 @@ use nakamoto_cash::p2p::Command;
 use nakamoto_cash::p2p::PeerId;
 type Reactor = nakamoto_cash::net::poll::Reactor<net::TcpStream>;
 use crossbeam_channel::{self as chan, Receiver, Sender};
-// mod bloom;
-// use bloom::{Bloom, BloomFilter};
-use std::io::Write;
+const TXID_LEN: usize = 32;
 
 #[derive(Clone, Debug)]
 pub enum UIMessage {
@@ -33,6 +32,7 @@ pub enum UIMessage {
     BlockConnected(u64),
     AddBlooomItem(String),
     SendLoadFilter,
+    ResetFilter,
     PeerLoadedFilter(PeerId),
     ReceivedMatchedTx { transaction: Transaction },
 }
@@ -102,10 +102,10 @@ impl<H: Handle> Watcher<H> {
             Event::ReceivedMatchedTx { transaction } => {
                 _ = ui_show_tx.send(UIMessage::ReceivedMatchedTx { transaction });
             }
-            Event::PeerLoadedBloomFilter { peer,.. } => {
+            Event::PeerLoadedBloomFilter { peer, .. } => {
                 log::info!("PeerLoadedFilter ??{:?}", peer);
 
-                ui_show_tx.send(UIMessage::PeerLoadedFilter(peer) );
+                ui_show_tx.send(UIMessage::PeerLoadedFilter(peer));
             }
             _ => {} // Added catch-all for unhandled events
         }
@@ -129,11 +129,19 @@ impl<H: Handle> Watcher<H> {
         match ui_input {
             UIMessage::AddBlooomItem(data) => {
                 let mut temp_bloom = Bloom::<u8>::new_for_fp_rate(1024, 0.01);
-                match hex::decode(data) {
-                    Ok(mut bytes) => {
-                        temp_bloom.set(&mut bytes);
+                if let Ok(addr_data) = cash_addr::decode(data.as_str()) {
+                    temp_bloom.set(&mut addr_data.0.clone());
+                } else {
+                    match hex::decode(data) {
+                        Ok(mut bytes) => {
+                            if TXID_LEN == bytes.len() {
+                                bytes.reverse();
+                                log::info!("Loading txid {:?}", hex::encode(bytes.clone()));
+                            }
+                            temp_bloom.set(&mut bytes);
+                        }
+                        Err(e) => println!("Error: {}", e),
                     }
-                    Err(e) => println!("Error: {}", e),
                 }
 
                 self.bloom = BloomFilter::from(temp_bloom);
@@ -147,6 +155,9 @@ impl<H: Handle> Watcher<H> {
                     let peers = peers.iter().map(|p| p.addr).collect::<Vec<_>>();
                     _ = self.send_bloom_filter(peers);
                 }
+            }
+            UIMessage::ResetFilter => {
+                self.bloom.content.clear();
             }
             _ => {}
         }
@@ -256,10 +267,16 @@ pub fn run_ui_main(
         });
     });
 
+    let ui_handle_tx = ui_input_tx.clone();
     let ui_input_tx = ui_input_tx.clone();
+
     let app = main_window.as_weak().clone();
     app.unwrap().on_load_peers_filter(move || {
         _ = ui_input_tx.send(UIMessage::SendLoadFilter);
+    });
+    let app = main_window.as_weak().clone();
+    app.unwrap().on_reset_filters(move || {
+        _ = ui_handle_tx.send(UIMessage::ResetFilter);
     });
 
     // Add Clipboard Functionality

@@ -1,4 +1,4 @@
-name: Build and Release Binaries
+name: build and release binaries
 
 on:
   push:
@@ -14,54 +14,53 @@ jobs:
         include:
           - os: ubuntu-latest
             binary_name: watch-demo-linux
-            binary_path: target/release/watch-demo
+            binary_path: target/release/examples/watch-demo
           - os: macos-latest
             binary_name: watch-demo-macos
-            binary_path: target/release/watch-demo
+            binary_path: target/release/examples/watch-demo
           - os: windows-latest
             binary_name: watch-demo-windows.exe
-            binary_path: target/release/watch-demo.exe
+            binary_path: target/release/examples/watch-demo.exe
 
     steps:
-      - name: Checkout code
+      - name: checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Rust
+      - name: set up rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
           components: rustfmt, clippy
 
-      - name: Build binary
+      - name: build binary
         working-directory: examples
         run: cargo build --release --verbose
 
-      - name: Rename binary for platform
+      - name: rename binary for platform
         if: matrix.os != 'windows-latest'
         shell: bash
-        working-directory: examples
-        run: mv target/release/watch-demo target/release/${{ matrix.binary_name }}
+        run: mv target/release/examples/watch-demo target/release/examples/${{ matrix.binary_name }}
 
-      - name: Create Release
+      - name: create release
         id: create_release
         uses: softprops/action-gh-release@v1
-        if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/')
+        if: matrix.os == 'ubuntu-latest' && startswith(github.ref, 'refs/tags/')
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
         with:
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: release ${{ github.ref_name }}
           draft: false
           prerelease: false
 
-      - name: Upload Binary
+      - name: upload binary
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startswith(github.ref, 'refs/tags/')
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
         with:
-          files: target/release/${{ matrix.binary_name }}
+          files: target/release/examples/${{ matrix.binary_name }}
           tag_name: ${{ github.ref_name }}
