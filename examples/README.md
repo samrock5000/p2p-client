@@ -1,6 +1,8 @@
 
 # Nakamoto-Cash Watch-Only Client Example 🚀
 
+![til](https://github.com/samrock5000/p2p-client/examples/assets/watch-demo.gif)
+
 This is an example application demonstrating a watch-only client for Bitcoin Cash using the `nakamoto-cash` crate (a fork of the Nakamoto P2P client). The application provides a basic UI for monitoring transactions matching specific criteria using Bloom filters. 🔍
 
 ## Features ✨
