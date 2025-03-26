@@ -600,26 +600,13 @@ checksum = "90064b8dee6815a6470d60bad07bbbaee885c0e12d04177138fa3291a01b7bc4"
 [[package]]
 name = "bitcoincash"
 version = "0.29.2"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "bech32",
- "bitcoin_hashes",
- "hex-conservative",
- "murmur3 0.4.1",
- "rand",
- "secp256k1",
-]
-
-[[package]]
-name = "bitcoincash"
-version = "0.29.2"
 source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
 dependencies = [
  "bech32",
  "bit-vec",
  "bitcoin_hashes",
  "hex-conservative",
- "murmur3 0.5.2",
+ "murmur3",
  "rand",
  "secp256k1",
 ]
@@ -3146,52 +3133,20 @@ dependencies = [
 
 [[package]]
 name = "murmur3"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a198f9589efc03f544388dfc4a19fe8af4323662b62f598b8dcfdac62c14771c"
-dependencies = [
- "byteorder",
-]
-
-[[package]]
-name = "murmur3"
 version = "0.5.2"
 source = "git+https://github.com/stusmall/murmur3#2c39087f094ae982a463e1cda9cf4d483a09192b"
 
 [[package]]
 name = "nakamoto-cash"
 version = "0.4.0"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-client 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-net-poll 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
-]
-
-[[package]]
-name = "nakamoto-cash"
-version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
 dependencies = [
- "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-client 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-net-poll 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
-]
-
-[[package]]
-name = "nakamoto-chain"
-version = "0.4.0"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "log",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "thiserror 1.0.69",
+ "nakamoto-chain",
+ "nakamoto-client",
+ "nakamoto-common",
+ "nakamoto-net",
+ "nakamoto-net-poll",
+ "nakamoto-p2p",
 ]
 
 [[package]]
@@ -3200,23 +3155,7 @@ version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
 dependencies = [
  "log",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "thiserror 1.0.69",
-]
-
-[[package]]
-name = "nakamoto-client"
-version = "0.4.0"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "crossbeam-channel",
- "fastrand 1.9.0",
- "log",
- "microserde",
- "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-common",
  "thiserror 1.0.69",
 ]
 
@@ -3229,25 +3168,10 @@ dependencies = [
  "fastrand 1.9.0",
  "log",
  "microserde",
- "nakamoto-chain 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-p2p 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "thiserror 1.0.69",
-]
-
-[[package]]
-name = "nakamoto-common"
-version = "0.4.0"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "bitcoin_hashes",
- "bitcoincash 0.29.2 (git+https://github.com/samrock5000/nakamoto)",
- "fastrand 1.9.0",
- "log",
- "microserde",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nonempty",
+ "nakamoto-chain",
+ "nakamoto-common",
+ "nakamoto-net",
+ "nakamoto-p2p",
  "thiserror 1.0.69",
 ]
 
@@ -3257,23 +3181,12 @@ version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
 dependencies = [
  "bitcoin_hashes",
- "bitcoincash 0.29.2 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "bitcoincash",
  "fastrand 1.9.0",
  "log",
  "microserde",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-net",
  "nonempty",
- "thiserror 1.0.69",
-]
-
-[[package]]
-name = "nakamoto-net"
-version = "0.4.0"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "crossbeam-channel",
- "fastrand 1.9.0",
- "log",
  "thiserror 1.0.69",
 ]
 
@@ -3291,41 +3204,14 @@ dependencies = [
 [[package]]
 name = "nakamoto-net-poll"
 version = "0.4.0"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "crossbeam-channel",
- "libc",
- "log",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "popol",
- "socket2",
-]
-
-[[package]]
-name = "nakamoto-net-poll"
-version = "0.4.0"
 source = "git+https://github.com/samrock5000/nakamoto-cash#153a6932450a93010b26844c6291ff97c5cb0442"
 dependencies = [
  "crossbeam-channel",
  "libc",
  "log",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-net",
  "popol",
  "socket2",
-]
-
-[[package]]
-name = "nakamoto-p2p"
-version = "0.4.0"
-source = "git+https://github.com/samrock5000/nakamoto#7fb6bfae28294a25ffb872cb3fb2c6b148b7d79a"
-dependencies = [
- "crossbeam-channel",
- "fastrand 1.9.0",
- "log",
- "microserde",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
- "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -3337,8 +3223,8 @@ dependencies = [
  "fastrand 1.9.0",
  "log",
  "microserde",
- "nakamoto-common 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
- "nakamoto-net 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "nakamoto-common",
+ "nakamoto-net",
  "thiserror 1.0.69",
 ]
 
@@ -3891,7 +3777,7 @@ dependencies = [
  "chrono",
  "crossbeam-channel",
  "log",
- "nakamoto-cash 0.4.0 (git+https://github.com/samrock5000/nakamoto)",
+ "nakamoto-cash",
 ]
 
 [[package]]
@@ -5571,8 +5457,8 @@ dependencies = [
  "crossbeam-channel",
  "hex",
  "log",
- "murmur3 0.5.2",
- "nakamoto-cash 0.4.0 (git+https://github.com/samrock5000/nakamoto-cash)",
+ "murmur3",
+ "nakamoto-cash",
  "rand",
  "slint",
  "slint-build",
