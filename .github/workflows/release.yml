@@ -42,7 +42,7 @@ jobs:
       - name: rename binary for platform
         if: matrix.os != 'windows-latest'
         shell: bash
-        run: mv target/release/examples/watch-demo target/release/examples/${{ matrix.binary_name }}
+        run: mv target/release/watch-demo target/release/${{ matrix.binary_name }}
 
       - name: create release
         id: create_release
@@ -62,5 +62,5 @@ jobs:
         env:
           github_token: ${{ secrets.github_token }}
         with:
-          files: target/release/examples/${{ matrix.binary_name }}
+          files: target/release/${{ matrix.binary_name }}
           tag_name: ${{ github.ref_name }}
