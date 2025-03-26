@@ -14,13 +14,13 @@ jobs:
         include:
           - os: ubuntu-latest
             binary_name: watch-demo-linux
-            binary_path: examples/target/release/watch-demo
+            binary_path: target/release/watch-demo
           - os: macos-latest
             binary_name: watch-demo-macos
-            binary_path: examples/target/release/watch-demo
+            binary_path: target/release/watch-demo
           - os: windows-latest
             binary_name: watch-demo-windows.exe
-            binary_path: examples/target/release/watch-demo.exe
+            binary_path: target/release/watch-demo.exe
 
     steps:
       - name: Checkout code
@@ -63,5 +63,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: examples/target/release/${{ matrix.binary_name }}
+          files: target/release/${{ matrix.binary_name }}
           tag_name: ${{ github.ref_name }}
