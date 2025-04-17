@@ -1,8 +1,6 @@
 
 use nakamoto_cash::client::handle;
 use thiserror::Error;
-use std::fmt;
-use std::io;
 /// An error occurring in the wallet.
 #[derive(Error, Debug)]
 pub enum Error {

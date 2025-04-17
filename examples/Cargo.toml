@@ -8,7 +8,8 @@ edition = "2024"
 slint-build = "1.10.0"
 
 [dependencies]
-nakamoto-cash = { git = "https://github.com/samrock5000/nakamoto-cash"  }
+nakamoto-cash = {version = "0.4.1", git = "https://github.com/samrock5000/nakamoto-cash"  }
+# nakamoto-cash = { path = "../../nakamoto-cash"  }
 log = { version = "0.4", features = ["std"] }
 thiserror = "1.0.61"
 chrono = { version = "0.4", features = ["std"], default-features = false }

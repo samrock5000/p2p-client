@@ -1,11 +1,10 @@
 use hex;
 use std::collections::HashSet;
 use std::ops::ControlFlow;
-use std::{env, io, net, thread};
+use std::{env,  net, thread};
 mod error;
 use arboard::Clipboard;
 use nakamoto_cash::chain::Transaction;
-use nakamoto_cash::common::bitcoin::network::constants::ServiceFlags;
 use nakamoto_cash::common::bitcoin::{Txid, cash_addr};
 use slint::PlatformError;
 use slint::{Model, ModelRc, SharedString};
@@ -14,7 +13,7 @@ use std::rc::Rc;
 slint::include_modules!();
 
 use argh::FromArgs;
-use client::{Client, Config, Event, Peer};
+use client::{Client, Config, Event };
 mod logger;
 use nakamoto_cash::client::traits::Handle;
 use nakamoto_cash::client::{self, Network};
@@ -72,11 +71,15 @@ impl FilterState {
         }
     }
 
-    pub fn reset(&mut self) {
+    pub fn reset<H: Handle>(
+        &mut self,
+        client: &H,
+    ) {
         let filter = Bloom::<u8>::new_for_fp_rate(10_000, 0.01);
         self.bloom = BloomFilter::from(filter);
         self.filtered_peers.clear();
         self.is_set = false;
+        _ = client.command(Command::BloomFilterClear);
     }
 
     pub fn add_bloom_item(&mut self, data: String) -> Result<(), error::Error> {
@@ -136,8 +139,6 @@ impl<H: Handle> Watcher<H> {
         events: &Receiver<client::Event>,
         ui_input_rx: &Receiver<UIMessage>,
         ui_show_tx: &Sender<UIMessage>,
-        // peers_vec_tx: &Sender<Vec<Peer>>,
-        // peers_vec_rx: &Receiver<Vec<Peer>>,
     ) -> Result<(), error::Error> {
         loop {
             if let Ok(event) = ui_input_rx.try_recv() {
@@ -227,8 +228,6 @@ impl<H: Handle> Watcher<H> {
     fn handle_user_input(
         &mut self,
         ui_input: UIMessage,
-        // peers_vec_tx: &Sender<Vec<Peer>>,
-        // peers_vec_rx: &Receiver<Vec<Peer>>,
     ) -> Result<ControlFlow<()>, error::Error> {
         match ui_input {
             UIMessage::AddBloomItem(data) => {
@@ -236,10 +235,6 @@ impl<H: Handle> Watcher<H> {
                 self.filter_state.is_set = true;
             }
             UIMessage::SendLoadFilter => {
-                // let peer_tx = peers_vec_tx.clone();
-                // self.client
-                //     .command(Command::GetPeers(ServiceFlags::BLOOM, peer_tx))?;
-                // if let Ok(peers) = peers_vec_rx.recv() {
                 if !self.filter_state.peers.is_empty() {
                     let peer_ids = self
                         .filter_state
@@ -252,25 +247,12 @@ impl<H: Handle> Watcher<H> {
                     self.filter_state
                         .send_bloom_filter(&self.client, peer_ids)?;
                 }
-                // }
             }
             UIMessage::ResetFilter => {
-                self.filter_state.reset();
+                self.filter_state.reset(&self.client);
             }
             UIMessage::ClearFilterAndPeers => {
-                self.filter_state.reset();
-                self.filter_state
-                    .send_bloom_filter(
-                        &self.client,
-                        self.filter_state
-                            .peers
-                            .to_vec()
-                            .iter()
-                            .cloned()
-                            .map(|p| (p, false))
-                            .collect::<Vec<_>>(),
-                    )
-                    .unwrap();
+                self.filter_state.reset(&self.client);
             }
             UIMessage::RequestBlocks(range) => {
 
@@ -324,7 +306,6 @@ fn main() {
     let (loading_tx, _loading_rx) = chan::unbounded();
     let (ui_show_tx, ui_show_rx) = chan::unbounded();
     let (ui_input_tx, ui_input_rx) = chan::unbounded();
-    // let (peers_vec_tx, peers_vec_rx) = chan::unbounded();
 
     let client_recv = handle.events();
 
