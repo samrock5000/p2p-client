@@ -107,8 +107,8 @@ export component MainWindow inherits Window {
                     VerticalBox {
                         Text {
                             text: "Latest Match: \{matched-tx}";
-                        // width:root.width * 0.2;
-                        color: #FFFFFF;
+                            // width:root.width * 0.2;
+                            color: #FFFFFF;
                             font-size: 12px;
                         }
 
@@ -120,7 +120,7 @@ export component MainWindow inherits Window {
 
                         ScrollView {
                             viewport-width: 300px;
-                            viewport-height: 100px;
+                            // viewport-height: 100px;
                             VerticalLayout {
                                 for item in root.matched-txs: Rectangle {
                                     border-color: #00CC66;
