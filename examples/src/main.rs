@@ -1,7 +1,7 @@
 use hex;
 use std::collections::HashSet;
 use std::ops::ControlFlow;
-use std::{env,  net, thread};
+use std::{env, net, thread};
 mod error;
 use arboard::Clipboard;
 use nakamoto_cash::chain::Transaction;
@@ -13,7 +13,7 @@ use std::rc::Rc;
 slint::include_modules!();
 
 use argh::FromArgs;
-use client::{Client, Config, Event };
+use client::{Client, Config, Event};
 mod logger;
 use nakamoto_cash::client::traits::Handle;
 use nakamoto_cash::client::{self, Network};
@@ -71,15 +71,13 @@ impl FilterState {
         }
     }
 
-    pub fn reset<H: Handle>(
-        &mut self,
-        client: &H,
-    ) {
+    pub fn reset(&mut self) {
         let filter = Bloom::<u8>::new_for_fp_rate(10_000, 0.01);
         self.bloom = BloomFilter::from(filter);
         self.filtered_peers.clear();
         self.is_set = false;
-        _ = client.command(Command::BloomFilterClear);
+        // You will get flooded with transactions, let's send an unset filter instead.
+        // _ = client.command(Command::BloomFilterClear);
     }
 
     pub fn add_bloom_item(&mut self, data: String) -> Result<(), error::Error> {
@@ -176,13 +174,13 @@ impl<H: Handle> Watcher<H> {
             }
             Event::MerkleBlockScanStarted { peer, .. } => {
                 self.filter_state.filtered_peers.iter_mut().for_each(|p| {
-                      if p.0 == peer {
+                    if p.0 == peer {
                         p.1 = true;
                     }
                 });
                 ui_show_tx.send(UIMessage::BlocksDownloading(true)).unwrap();
             }
-            Event::MerkleBlockRescanStopped { peer,.. } => {
+            Event::MerkleBlockRescanStopped { peer, .. } => {
                 self.filter_state.filtered_peers.iter_mut().for_each(|p| {
                     if p.0 == peer {
                         p.1 = false;
@@ -206,11 +204,13 @@ impl<H: Handle> Watcher<H> {
                     .send(UIMessage::ReceivedMatchedTx { transaction })
                     .unwrap();
             }
-            Event::ReceivedMerkleBlock { merkle_block,height,.. } => {
+            Event::ReceivedMerkleBlock {
+                merkle_block,
+                height,
+                ..
+            } => {
                 _ = merkle_block;
-                ui_show_tx
-                    .send(UIMessage::ReceivedBlock(height))
-                    .unwrap();
+                ui_show_tx.send(UIMessage::ReceivedBlock(height)).unwrap();
                 // let mut matches = self.txids.iter().cloned().collect::<Vec<_>>();
                 // let mut indexes: Vec<u32> = vec![];
                 // _ = merkle_block.extract_matches(&mut matches, &mut indexes);
@@ -225,10 +225,7 @@ impl<H: Handle> Watcher<H> {
         Ok(ControlFlow::Continue(()))
     }
 
-    fn handle_user_input(
-        &mut self,
-        ui_input: UIMessage,
-    ) -> Result<ControlFlow<()>, error::Error> {
+    fn handle_user_input(&mut self, ui_input: UIMessage) -> Result<ControlFlow<()>, error::Error> {
         match ui_input {
             UIMessage::AddBloomItem(data) => {
                 self.filter_state.add_bloom_item(data)?;
@@ -248,14 +245,23 @@ impl<H: Handle> Watcher<H> {
                         .send_bloom_filter(&self.client, peer_ids)?;
                 }
             }
-            UIMessage::ResetFilter => {
-                self.filter_state.reset(&self.client);
-            }
+            UIMessage::ResetFilter => {}
             UIMessage::ClearFilterAndPeers => {
-                self.filter_state.reset(&self.client);
+                self.filter_state.reset();
+                self.filter_state
+                    .send_bloom_filter(
+                        &self.client,
+                        self.filter_state
+                            .peers
+                            .to_vec()
+                            .iter()
+                            .cloned()
+                            .map(|p| (p, false))
+                            .collect::<Vec<_>>(),
+                    )
+                    .unwrap();
             }
             UIMessage::RequestBlocks(range) => {
-
                 self.client.command(Command::MerkleBlockRescan {
                     from: std::ops::Bound::Included(range.begin),
                     to: std::ops::Bound::Included(range.end),
@@ -319,22 +325,19 @@ fn main() {
     logger::init(level).expect("initializing logger for the first time");
     let t1 = thread::spawn(move || client.load(cfg, loading_tx)?.run());
     let t2 = thread::spawn(move || {
-        if let Err(err) = Watcher::new(handle.clone(), network).run(
-            &client_recv,
-            &ui_input_rx,
-            &ui_show_tx,
-        ) {
+        if let Err(err) =
+            Watcher::new(handle.clone(), network).run(&client_recv, &ui_input_rx, &ui_show_tx)
+        {
             println!("FATAL ERR {:?}", err);
             std::process::exit(1);
         }
     });
 
     run_ui_main(&ui_input_tx, &ui_show_rx).expect("UI failed");
-        shutdown_tx.shutdown().unwrap();
+    shutdown_tx.shutdown().unwrap();
     _ = slint::quit_event_loop();
     t1.join().unwrap().unwrap();
     t2.join().unwrap();
-
 }
 
 pub fn run_ui_main(
@@ -477,7 +480,6 @@ pub fn run_ui_main(
         }
     });
 
-
     let app = main_window.as_weak();
     std::thread::spawn(move || {
         loop {
@@ -558,7 +560,7 @@ pub fn run_ui_main(
     });
 
     main_window.run().unwrap();
-      Ok(())
+    Ok(())
 }
 
 impl Options {
